@@ -1,8 +1,6 @@
 Docker Swarm Manager
 ==============
 
-# [![Build Status](https://travis-ci.org/szwacz/electron-boilerplate.svg?branch=master)](https://travis-ci.org/szwacz/electron-boilerplate) [![Build status](https://ci.appveyor.com/api/projects/status/s9htc1k5ojkn08fr?svg=true)](https://ci.appveyor.com/project/szwacz/electron-boilerplate)
-
 A simple client application to provide a visual manager for Docker Swarm. The manager is build in NodeJS Electron.
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
