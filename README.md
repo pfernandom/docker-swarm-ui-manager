@@ -2,7 +2,7 @@ Docker Swarm Manager
 ==============
 
 A simple client application to provide a visual manager for Docker Swarm. The manager is build in NodeJS Electron.
-# Quick start
+# TLDR
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
 Then type few commands known to every Node developer...
 ```
@@ -12,7 +12,9 @@ npm install
 npm start
 
 This will install and run the application in your computer.
+```
 
+#Setup
 
 ### Installation
 
