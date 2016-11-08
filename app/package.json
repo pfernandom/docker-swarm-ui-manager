@@ -1,0 +1,14 @@
+{
+  "name": "docker-swarm-manager",
+  "productName": "Docker Swarm Manager",
+  "description": "A Docker Swarm manager using Electron",
+  "version": "0.0.1",
+  "author": "Pedro Marquez <pfernandom@gmail.com>",
+  "copyright": "© 2016.",
+  "homepage": "http://pfernandom.github.io/",
+  "license": "MIT",
+  "main": "background.js",
+  "dependencies": {
+    "fs-jetpack": "^0.9.0"
+  }
+}

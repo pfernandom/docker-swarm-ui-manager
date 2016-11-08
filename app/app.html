@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Docker Swarm Manager</title>
+
+    <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
+
+    <script src="helpers/context_menu.js"></script>
+    <script src="helpers/external_links.js"></script>
+
+	 <!-- build:js scripts/vendor.js -->
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-route/angular-route.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-aria/angular-aria.js"></script>
+    <script src="../bower_components/angular-material/angular-material.js"></script>
+    <!-- endbuild -->
+    <script src="app.js"></script>
+	
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <!-- build:css assets/css/app.css -->
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
+    <!-- endbuild -->
+	
+</head>
+<body ng-app="app" ng-controller="MainCtrl as ctrl">
+	<!--
+    <div class="container">
+        <h1 id="greet"></h1>
+        <p class="subtitle">
+            Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
+        </p>
+        <p class="subtitle">
+            You are in <strong id="env-name"></strong> environment.s
+        </p>
+		<strong id="docker">...</strong>
+    </div>
+	-->
+	
+	<div layout="row">
+  <div flex="20">
+    <!--[flex="20"]-->
+	 <md-toolbar layout="row" class="md-hue-3">
+      <div class="md-toolbar-tools">
+        <span>{{ctrl.nodeTitle}}</span>
+      </div>
+    </md-toolbar>
+
+    <md-content>
+      <md-list>
+		  <md-list-item class="md-2-line" ng-repeat="node in ctrl.nodes" ng-click="ctrl.showManager($event,node)">
+			<!--<md-switch class="md-secondary"></md-switch>-->
+			<div class="md-list-item-text">
+			  <h3>{{node.Description.Hostname}}</h3>
+			  <p>{{node.Spec.Role}} ({{node.Spec.Availability}})</p>
+			</div>
+		  </md-list-item>
+		</md-list>
+    </md-content>
+  </div>
+  <div flex="70">
+    <!--[flex="70"]-->
+	<md-toolbar layout="row" class="md-hue-3">
+      <div class="md-toolbar-tools">
+        <span>Node Swarm</span>
+      </div>
+    </md-toolbar>
+	<md-content class="md-padding">
+		<md-nav-bar md-selected-nav-item="ctrl.currentNavItem" nav-bar-aria-label="navigation links">
+		  <md-nav-item md-nav-click="goto('services')" name="services">Services</md-nav-item>
+		  <md-nav-item md-nav-click="goto('page2')" name="page2">Page Two</md-nav-item>
+		</md-nav-bar>
+		<div class="ext-content">
+			<!--
+		  External content for `<span>{{currentNavItem}}</span>`
+			-->
+			<div ng-if="ctrl.currentNavItem == 'services'">
+		  <table class="dock-table">
+			  <thead>
+			  	<th>ID</th>
+				<th>Name</th>
+				<th>Replicas</th>
+				<th>Image</th>
+			  </thead>
+		  <tr ng-repeat="service in ctrl.services">
+			<td>
+				{{service.id}}
+			</td>
+			<td>
+			  <a href="" ng-click="ctrl.openService(service.name)">{{service.name}}</a>
+			</td>
+			<td>
+			  {{service.replicas}}
+			</td>
+			<td>
+			  {{service.image}}
+			</td>
+		  </tr>
+		  </table>
+
+			<!--
+			<div ng-repeat="service in ctrl.services">
+				{{service | json}}
+			</div>
+			-->
+			<md-subheader class="md-primary" ng-if="ctrl.opService">Service: {{ctrl.opService.Spec.Name}}</md-subheader>
+			<pre class="dock-pre">{{ctrl.opService | json}}</pre>
+			</div>
+
+			<div ng-if="ctrl.currentNavItem == 'page2'"></div>
+
+
+
+		</div>
+	  </md-content>
+  </div>
+</div>
+
+	<div style="visibility: hidden">
+		<div class="md-dialog-container" id="myStaticDialog">
+			<md-dialog aria-label="Mango (Fruit)">
+				<form>
+					<md-toolbar>
+						<div class="md-toolbar-tools">
+							<h2>Node: {{ctrl.openNode.Description.Hostname}}</h2>
+							<span flex></span>
+							<md-button class="md-icon-button" ng-click="ctrl.closeModal()">
+								<md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+							</md-button>
+						</div>
+					</md-toolbar>
+					<md-dialog-content style="max-width:800px;max-height:810px; ">
+						<pre class="dock-modal">{{ctrl.openNode | json}}</pre>
+					</md-dialog-content>
+
+					<md-dialog-actions layout="row">
+						<md-button ng-click="ctrl.closeModal()" style="margin-right:20px;" >
+							Close
+						</md-button>
+					</md-dialog-actions>
+				</form>
+			</md-dialog>
+		</div>
+	</div>
+
+</body>
+</html>
