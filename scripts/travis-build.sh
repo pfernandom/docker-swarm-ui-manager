@@ -17,4 +17,4 @@ npm --version
 npm install
 npm test & npm run e2e
 
-
+ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
