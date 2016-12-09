@@ -32,10 +32,10 @@
     <!--[flex="20"]-->
 	 <md-toolbar layout="row" class="md-hue-3">
       <div class="md-toolbar-tools">
-        <span>
+        <span id="title">
             {{ctrl.nodeTitle}}
         </span>
-          <span ng-if="ctrl.nodesLoading">
+          <span ng-if="ctrl.nodes">
               <md-progress-circular md-diameter="25px" class="loadingNodes" md-mode="indeterminate"></md-progress-circular>
           </span>
       </div>
