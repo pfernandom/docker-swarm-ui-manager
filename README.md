@@ -1,4 +1,4 @@
-Docker Swarm Manager
+Electroswarm
 ==============
 
 A simple client application to provide a visual manager for Docker Swarm. The manager is build in NodeJS Electron.
