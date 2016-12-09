@@ -1,0 +1,6 @@
+{
+  "name": "Electroswarm",
+  "tagline": "",
+  "body": "### An Electron based Docker Swarm Manager\r\nElectroswarm is a desktop, Electron-based application to manage Docker Swarms.",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
