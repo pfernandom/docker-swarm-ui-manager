@@ -45,6 +45,7 @@
     "gulp-less": "^3.0.3",
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.6",
+    "gulp-copy": "^1.0.0",
     "gulp-watch": "^4.3.5",
     "mocha": "^3.0.2",
     "rollup": "^0.34.7",
@@ -53,6 +54,8 @@
     "yargs": "^4.2.0"
   },
   "dependencies": {
+    "angular-ui-router": "^0.3.2",
+    "electron-config": "^0.2.1",
     "electron-settings": "^2.2.2",
     "shelljs": "^0.7.5",
     "simple-ssh": "^0.9.0"

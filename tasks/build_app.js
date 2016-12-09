@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
 var watch = require('gulp-watch');
+var copy = require('gulp-copy');
 var batch = require('gulp-batch');
 var plumber = require('gulp-plumber');
 var jetpack = require('fs-jetpack');
@@ -27,6 +28,12 @@ gulp.task('less', function () {
         .pipe(gulp.dest(destDir.path('stylesheets')));
 });
 
+gulp.task('templates', function () {
+    return gulp.src(srcDir.path('templates/*'))
+        .pipe(plumber())
+        .pipe(gulp.dest(destDir.path('templates')));
+});
+
 gulp.task('environment', function () {
     var configFile = 'config/env_' + utils.getEnvName() + '.json';
     projectDir.copy(configFile, destDir.path('env.json'), { overwrite: true });
@@ -48,6 +55,9 @@ gulp.task('watch', function () {
     watch('src/**/*.less', batch(function (events, done) {
         gulp.start('less', beepOnError(done));
     }));
+    watch('src/**/*.html', batch(function (events, done) {
+        gulp.start('templates', beepOnError(done));
+    }));
 });
 
-gulp.task('build', ['bundle', 'less', 'environment']);
+gulp.task('build', ['bundle', 'templates', 'less', 'environment']);

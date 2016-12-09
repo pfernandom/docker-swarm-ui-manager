@@ -16,11 +16,13 @@ import env from './env';
 var mainWindow;
 
 var setApplicationMenu = function () {
-    var menus = [editMenuTemplate];
+    var menus = [];
     if (env.name !== 'production') {
         menus.push(devMenuTemplate);
     }
-    menus.push(settingsMenuTemplate);
+    //menus.push(editMenuTemplate
+    // );
+    //menus.push(settingsMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 

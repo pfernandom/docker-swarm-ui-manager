@@ -3,9 +3,10 @@ import { dialog, app, BrowserWindow } from 'electron';
 export var settingsMenuTemplate = {
     label: 'Settings',
     submenu: [{
-        label: 'Settings',
+        label: 'Manager IP',
         click: function () {
-            console.log(dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']}))
+            BrowserWindow.getFocusedWindow().toggleDevTools();
+            //console.log(dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']}))
         }
     }]
 };

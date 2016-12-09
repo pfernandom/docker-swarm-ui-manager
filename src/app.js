@@ -5,10 +5,12 @@
 import os from 'os'; // native node.js module
 import { remote } from 'electron'; // native electron module
 import jetpack from 'fs-jetpack'; // module loaded from npm
-import { greet } from './hello_world/hello_world'; // code authored by you in this project
+import { DockerService } from './services/DockerService';
+import { MainCtrl } from './controllers/MainCtrl';
+import Config from 'electron-config';
 import env from './env';
-import shell from 'shelljs';
-import SSH from 'simple-ssh';
+
+import uiRouter from 'angular-ui-router';
 
 console.log('Loaded environment variables:', env);
 
@@ -32,162 +34,75 @@ document.addEventListener('DOMContentLoaded', function () {
 
 (function () {
     'use strict';
-    
-    var _templateBase = './scripts';
-    
+    var _templateBase = './templates';
+
     angular.module('app', [
-        'ngRoute',
+        uiRouter,
         'ngMaterial',
         'ngAnimate'
     ])
 	.controller('DialogController',['$scope','$mdDialog','DockerService',function($scope,$mdDialog,DockerService){
-		console.log($scope);
 		this.cancel = function() {
 			$mdDialog.cancel();
 		};
 	}])
-	.controller('MainCtrl',['$scope','$mdDialog','DockerService',function($scope,$mdDialog,DockerService){
-		var ctrl = this;
-		ctrl.nodeTitle = "Nodes";
+	.controller('MainCtrl',MainCtrl)
+	.service('DockerService',DockerService)
+    .config(function($stateProvider, $urlRouterProvider) {
+        $stateProvider
+            .state('node', {
+                url: '/node/:nodeName',
+                templateUrl: _templateBase + '/nodeDetails.html' ,
+                controller: function ($rootScope,$stateParams, DockerService) {
+                    // If we got here from a url of /contacts/42
+                    var ctrl = this;
+                    DockerService.getNodeDetails($stateParams.nodeName).then(function(node){
+                        ctrl.node = node[0];
+                    })
 
-		ctrl.currentNavItem = "services"
-		ctrl.loadNodes = function(){
-			DockerService.getNodes().then(function(data){
-				ctrl.nodes = [];
-				for(var i in data){
-					DockerService.getNodeDetails(data[i]).then(function(node){
-						ctrl.nodes.push(node[0]);
-					}).catch(function(){console.error(":(");});
-				}
-			});
-		}
-		ctrl.loadNodes();
-		ctrl.showManager = function(ev,node) {
-			ctrl.loadNodes();
-			ctrl.openNode = node;
-			$mdDialog.show({
-				contentElement: '#myStaticDialog',
-				parent: angular.element(document.body),
-				fullScreen:true
-			})
-		};
 
-		ctrl.closeModal = function(){
-			$mdDialog.cancel();
-		}
+                    //$rootScope.$stateParams = $stateParams;
+                    //expect($stateParams).toBe({contactId: "42"});
+                },
+                controllerAs: 'ctrl'
+            })
+    })
+    .run(['$rootScope', '$state','$mdDialog','DockerService', function ($rootScope, $state,$mdDialog, DockerService) {
+            const DOCKER_MANAGER_IP_KEY = 'docker.manager.ip';
+            const config = new Config();
+            if(!config.has(DOCKER_MANAGER_IP_KEY)){
+                var confirm = $mdDialog.prompt()
+                    .title('What is the IP of your Docker Swarm Manager?')
+                    .textContent('We will only ask this once.')
+                    .placeholder('127.0.0.7')
+                    .ariaLabel('Manager IP')
+                    .ok('Save!')
+                    .cancel('Cancel');
 
-		DockerService.getServices().then(function(data){
-			ctrl.services = data;
-		});
-		ctrl.openService = function(service){
-			DockerService.getService(service).then(function(data){
-				ctrl.opService = data[0];
-			});
-		}
-		 
-	}])
-	.service('DockerService',['$q',function($q){
-		var getSSH = function(){
-			var ssh = new SSH({
-				host: '192.168.99.118',
-				user: 'docker',
-				pass: 'tcuser'
-			});
-			ssh.on('error', function(err) {
-				console.log('Oops, something went wrong.');
-				console.log(err);
-				ssh.end();
-			});
-			return ssh;
-		}
-		return {
-			getServices:function(){
-				var ssh = getSSH();
-				var defered = $q.defer();
-				//192.168.99.118
-				var data = "";
-				ssh.exec("docker service ls | awk 'NR>1{ print $1,$2,$3,$4}'", {
-					out: function(stdout) {
-						data = data + stdout;
-					},
-					exit:function(){
-						var services = [];
-						data = data.replace(/\n$/, "")
-						for(var i in data.split("\n")){
-							var service = {};
-							service.id = data.split("\n")[i].split(" ")[0];
-							service.name = data.split("\n")[i].split(" ")[1];
-							service.replicas = data.split("\n")[i].split(" ")[2];
-							service.image = data.split("\n")[i].split(" ")[3];
-							services.push(service);
-						}
-						console.log("Exit",services);
-						defered.resolve(services);
+                const showModal = function(value){
+                    confirm.initialValue(value)
+                    $mdDialog.show(confirm).then(function(result) {
+                        DockerService.testConnection(result).then(function(data){
+                            DockerService.setManagerIP(result);
+                           //$rootScope.$broadcast('reloadPage');
+                            $rootScope.$broadcast("managerIPSet",result);
+                        }).catch(function(err){
+                            alert(err);
+                            showModal(result);
+                        }).finally(function(){
+                            ctrl.saving = false;
+                        })
 
-					}
-				}).start();
-				return defered.promise;
-			},
-			getService:function(service){
-				var ssh = getSSH();
-				var defered = $q.defer();
-				//192.168.99.118
-				var data = "";
-				ssh.exec("docker service inspect "+service, {
-					out: function(node) {
-						data = data + node;
-					},
-					exit:function(){
-						data = data.replace(/\n$/, "")
-						defered.resolve(JSON.parse(data));
-					}
-				}).start();
-				return defered.promise;
-			},
-			getNodes(){
-				var ssh = getSSH();
-				var defered = $q.defer();
-				var nodes = [];
-				var data = "";
-				ssh.exec("docker node ls | tr '*' ' ' | awk 'NR>1{print $2}'", {
-					out: function(stdout) {
-						data = data + stdout;
-					},
-					exit:function(){
-						data = data.replace(/\n$/, "")
-						console.log("Exit",data.split("\n"));
-						defered.resolve(data.split("\n"));
-					}
-				}).start();
-				return defered.promise;
-			},
-			getNodeDetails: function(name){
-				var ssh = getSSH();
-				var defered = $q.defer();
-				var data = "";
-				ssh.exec("docker node inspect "+name, {
-					out: function(node) {
-						data = data + node;
-					},
-					exit:function(){
-						data = data.replace(/\n$/, "")
-						defered.resolve(JSON.parse(data));
-					}
-				}).start();
-				return defered.promise;
-			}
-
-		}
-		
-	}])
-    .config(['$routeProvider', function ($routeProvider) {
-            $routeProvider.when('/', {
-                templateUrl: _templateBase + '/customer/customer.html' ,
-                controller: 'customerController',
-                controllerAs: '_ctrl'
-            });
-            $routeProvider.otherwise({ redirectTo: '/' });
+                    }, function() {
+                        $rootScope.$broadcast("managerIPSet",result);
+                    });
+                }
+                showModal("");
+            }
+            else{
+                $rootScope.$broadcast("managerIPSet",true);
+            }
+            $rootScope.$state = $state;
         }
     ]);
-
 })();
