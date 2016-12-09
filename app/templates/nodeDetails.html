@@ -1,0 +1,58 @@
+<div>
+    <md-subheader class="md-no-sticky" ng-if="ctrl.node.ManagerStatus">Manager Details</md-subheader>
+    <md-list ng-if="ctrl.node.ManagerStatus">
+        <md-list-item class="md-2-line md-offset">
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.ManagerStatus.Leader}}</h3>
+                <p>ManagerStatus.Leader</p>
+            </div>
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.ManagerStatus.Addr}}</h3>
+                <p>ManagerStatus.Addr</p>
+            </div>
+        </md-list-item>
+    </md-list>
+    <md-divider ng-if="ctrl.node.ManagerStatus"></md-divider>
+
+    <md-subheader class="md-no-sticky">Node Details</md-subheader>
+    <md-list>
+        <md-list-item class="md-2-line md-offset">
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.Description.Hostname}}</h3>
+                <p>Description.Hostname</p>
+            </div>
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.Spec.Availability}}</h3>
+                <p>Spec.Availability</p>
+            </div>
+        </md-list-item>
+        <md-list-item class="md-2-line md-offset">
+
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.CreatedAt | date:'medium'}}</h3>
+                <p>CreatedAt</p>
+            </div>
+
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.UpdatedAt | date:'medium'}}</h3>
+                <p>UpdatedAt</p>
+            </div>
+
+        </md-list-item>
+        <md-list-item class="md-2-line md-offset">
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.Spec.Role}}</h3>
+                <p>Spec.Role</p>
+            </div>
+
+            <div class="md-list-item-text" >
+                <h3>{{ctrl.node.Description.Engine.Labels.provider}}</h3>
+                <p>Engine.Labels.provider</p>
+            </div>
+
+        </md-list-item>
+    </md-list>
+    <md-divider ></md-divider>
+
+
+</div>
