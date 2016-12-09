@@ -15,7 +15,7 @@ deploy:
   provider: releases
   api_key:
     secure: o311Kc6HP7v4KooxkqYziyxPe5tBmpUWdvielaYSZB0MDXWYnRJpWz10+Q5gjZ9UfPUofmgiScaZfrU8CgbWCiENZLXxOaZLgrDTyR/YWyZI3n5V14X+KIinSH2sUmQz9PvaaHirUUL/9LKSRCUMeg10W4I5j23KbU2ajL7jSUZV6ooKD2FTtl51nPpn8Rj2gS060hq6/81hGF/md1HZFJyi8niWEqMhnBan5l+cI7WgIpBHISlGW1GrYph1SZjUlhTGUGHtrvgG7oD3pEXuLJVHU4crdPEdLgExMIWWWpmQ5v4F347EKmmdQ4RxjB2U2jgiFU/2kvEEaRyFpcmsT4FgiPfBerr7OHkpKoOHh3cu+jJyVMNH67NFJYvgodXUI7VhHFhbNoxBnvyezvc8d+Qy8p2TVVQ9mgWVusH1aAj+73OQi8hOc5hgFsfAMcpbyIqhEnaxpVLbOnEP41/5K4oKt3acE/NxeYYKgEYaH+wS1M3piVyOnZRDwExf9yLcQRApFlUFnnQEX6vF8322GyEfdyakNYK934ze8YjaPMdLghrjgfsnJ39tU9c/IzAex4IQvyjVufZrYXa+YzhU8X9WTYIiPti8mY3ThjdJOycnyu+EuQiHri/TfFr/KC5bOIdKIR2RuCZXwJ5Oc/OTcO+agcAlluBrH32Pnw/ozGQ=
-  file: dist/
+  file: dist/electroswarm-0.0.1.deb
   skip_cleanup: true
   overwrite: true
   on:
