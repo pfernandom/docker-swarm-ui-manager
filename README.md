@@ -13,7 +13,9 @@ npm start
 
 This will install and run the application in your computer.
 ```
+![](https://pfernandom.github.io/electroswarm/images/img3.png)
 
+![](https://pfernandom.github.io/electroswarm/images/img2.png)
 #Setup
 
 ### Installation
