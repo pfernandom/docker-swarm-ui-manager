@@ -4,6 +4,7 @@ os:
 branches:
   only:
   - master
+  - Branch_v0.0.1
 env:
 - NODE_VERSION="6.3.0"
 script: "./scripts/travis-build.sh"
