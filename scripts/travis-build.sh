@@ -18,4 +18,4 @@ npm install
 npm test & npm run e2e
 npm run release
 
-ls -d */*
+ls -d */* 
