@@ -1,9 +1,6 @@
 os:
 - linux
 - osx
-branches:
-  only:
-  - master
 env:
 - NODE_VERSION="6.3.0"
 script: "./scripts/travis-build.sh"
